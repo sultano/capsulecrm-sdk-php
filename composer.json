@@ -1,11 +1,5 @@
 {
   "name": "sultano/capsulecrm-sdk-php",
-  "authors": [
-    {
-      "name": "Suleman Chikhalia",
-      "email": "s.chikhalia@gmail.com"
-    }
-  ],
   "minimum-stability": "dev",
   "require": {},
   "autoload": {
