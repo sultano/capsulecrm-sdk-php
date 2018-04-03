@@ -3,6 +3,7 @@
 namespace CapsuleCRM;
 
 use CapsuleCRM\Exception;
+use CapsuleCRM\Resource\AbstractResource;
 
 class Client
 {
@@ -129,13 +130,13 @@ class Client
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             sprintf('Authorization: Bearer %s', $this->accessToken),
             'Accept: application/json',
-            'Content-Type: application/json',
         ]);
 
         if ($data !== null) {
             $jsonData = json_encode($data);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/json',
                 'Content-Length: ' . strlen($jsonData),
             ]);
         }
@@ -160,5 +161,20 @@ class Client
         }
 
         return $response;
+    }
+
+    /**
+     * @param string $name
+     * @return AbstractResource
+     */
+    public function __get($name)
+    {
+        $resourceClass = 'CapsuleCRM\Resource\\' . ucfirst($name);
+        if (!class_exists($resourceClass)) {
+            throw new \RuntimeException('Undefined property');
+        }
+
+        $resource = new $resourceClass($this);
+        return $resource;
     }
 }
