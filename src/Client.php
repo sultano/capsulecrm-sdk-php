@@ -36,11 +36,11 @@ class Client
 
     /**
      * Client constructor.
-     * @param string $apiKey
+     * @param string $accessToken
      */
-    public function __construct($apiKey = '')
+    public function __construct($accessToken = '')
     {
-        $this->setAccessToken($apiKey);
+        $this->setAccessToken($accessToken);
     }
 
     /**
