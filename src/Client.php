@@ -143,10 +143,14 @@ class Client
 
         // Log last raw response
         $this->lastResponseRaw = curl_exec($ch);
+
+        // Get status code and errors before closing handle
+        $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $errorNumber = curl_errno($ch);
         $error = curl_error($ch);
         curl_close($ch);
 
+        // Check for a Curl error
         if ($errorNumber) {
             throw new Exception\RuntimeException('CURL: ' . $error, $errorNumber);
         }
@@ -155,7 +159,6 @@ class Client
         $this->lastResponse = $response = json_decode($this->lastResponseRaw, true);
 
         // Check HTTP status code
-        $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         if ($statusCode < 200 || $statusCode >= 300) {
             throw new Exception\RuntimeException('Request failure: ' . $response['result'], $statusCode);
         }
