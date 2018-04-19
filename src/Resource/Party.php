@@ -18,6 +18,7 @@ class Party extends AbstractResource implements SearchableInterface
 
     /**
      * @return array
+     * @throws \CapsuleCRM\Exception\ApiException
      */
     public function search()
     {
@@ -25,6 +26,6 @@ class Party extends AbstractResource implements SearchableInterface
             'q' => $this->getQuery(),
             'page' => $this->getPage(),
             'perPage' => $this->getPerPage(),
-        ]);
+        ])['parties'];
     }
 }

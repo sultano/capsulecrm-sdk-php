@@ -29,7 +29,7 @@ trait SearchableTrait
 
     /**
      * @param string $query
-     * @return SearchableTrait
+     * @return $this
      */
     public function setQuery($query)
     {
@@ -47,7 +47,7 @@ trait SearchableTrait
 
     /**
      * @param int $page
-     * @return SearchableTrait
+     * @return $this
      */
     public function setPage($page)
     {
@@ -65,7 +65,7 @@ trait SearchableTrait
 
     /**
      * @param int $perPage
-     * @return SearchableTrait
+     * @return $this
      */
     public function setPerPage($perPage)
     {

@@ -3,8 +3,15 @@
 namespace CapsuleCRM;
 
 use CapsuleCRM\Exception;
+use CapsuleCRM\Resource;
 use CapsuleCRM\Resource\AbstractResource;
 
+/**
+ * Class Client
+ *
+ * @package CapsuleCRM
+ * @property-read Resource\Party $party party resource
+ */
 class Client
 {
     const API_ENDPOINT = 'https://api.capsulecrm.com/api/v2/';
@@ -60,6 +67,7 @@ class Client
      * @param string $path
      * @param array $params
      * @return array
+     * @throws Exception\ApiException
      */
     public function get($path, $params = [])
     {
@@ -71,6 +79,7 @@ class Client
      * @param array $data
      * @param array $params
      * @return array
+     * @throws Exception\ApiException
      */
     public function post($path, $data = [], $params = [])
     {
@@ -82,6 +91,7 @@ class Client
      * @param array $data
      * @param array $params
      * @return array
+     * @throws Exception\ApiException
      */
     public function put($path, $data = [], $params = [])
     {
@@ -92,6 +102,7 @@ class Client
      * @param string $path
      * @param array $params
      * @return array
+     * @throws Exception\ApiException
      */
     public function delete($path, $params = [])
     {
@@ -102,9 +113,9 @@ class Client
      * @param string $method
      * @param string $path
      * @param array $params
-     * @param mixed $data
+     * @param string|array|null $data
      * @return array
-     * @throws Exception\RuntimeException
+     * @throws Exception\ApiException
      */
     private function request($method, $path, array $params = [], $data = null)
     {
@@ -160,7 +171,7 @@ class Client
 
         // Check HTTP status code
         if ($statusCode < 200 || $statusCode >= 300) {
-            throw new Exception\RuntimeException('Request failure: ' . $response['result'], $statusCode);
+            throw new Exception\ApiException('Request failure: ' . $response['result'], $statusCode);
         }
 
         return $response;
@@ -174,7 +185,7 @@ class Client
     {
         $resourceClass = 'CapsuleCRM\Resource\\' . ucfirst($name);
         if (!class_exists($resourceClass)) {
-            throw new \RuntimeException('Undefined property');
+            throw new Exception\RuntimeException('Undefined property');
         }
 
         $resource = new $resourceClass($this);
