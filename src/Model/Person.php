@@ -1,8 +1,8 @@
 <?php
 
-namespace CapsuleCRM\Entity;
+namespace CapsuleCRM\Model;
 
-abstract class AbstractParty
+class Person extends AbstractParty
 {
     const TITLE_MR = 'Mr';
     const TITLE_MASTER = 'Master';
@@ -13,52 +13,42 @@ abstract class AbstractParty
     const TITLE_PROF = 'Prof';
 
     /**
-     * @var int
+     * @var string
      */
-    protected $id;
+    public $type = 'person';
 
     /**
      * @var string
      */
-    protected $firstName;
+    public $firstName;
 
     /**
      * @var string
      */
-    protected $lastName;
+    public $lastName;
 
     /**
      * @var string
      */
-    protected $title;
+    public $title;
 
     /**
      * @var string
      */
-    protected $about;
+    public $jobTitle;
 
     /**
-     * @return int
+     * @var Organisation
      */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     * @return AbstractParty
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-        return $this;
-    }
+    public $organisation;
 
     /**
      * @return string
      */
-    abstract public function getType();
+    public function getType()
+    {
+        return $this->type;
+    }
 
     /**
      * @return string
@@ -70,7 +60,7 @@ abstract class AbstractParty
 
     /**
      * @param string $firstName
-     * @return AbstractParty
+     * @return Person
      */
     public function setFirstName($firstName)
     {
@@ -88,7 +78,7 @@ abstract class AbstractParty
 
     /**
      * @param string $lastName
-     * @return AbstractParty
+     * @return Person
      */
     public function setLastName($lastName)
     {
@@ -106,7 +96,7 @@ abstract class AbstractParty
 
     /**
      * @param string $title
-     * @return AbstractParty
+     * @return Person
      */
     public function setTitle($title)
     {
@@ -117,18 +107,36 @@ abstract class AbstractParty
     /**
      * @return string
      */
-    public function getAbout()
+    public function getJobTitle()
     {
-        return $this->about;
+        return $this->jobTitle;
     }
 
     /**
-     * @param string $about
-     * @return AbstractParty
+     * @param string $jobTitle
+     * @return Person
      */
-    public function setAbout($about)
+    public function setJobTitle($jobTitle)
     {
-        $this->about = $about;
+        $this->jobTitle = $jobTitle;
+        return $this;
+    }
+
+    /**
+     * @return Organisation
+     */
+    public function getOrganisation()
+    {
+        return $this->organisation;
+    }
+
+    /**
+     * @param Organisation $organisation
+     * @return Person
+     */
+    public function setOrganisation(Organisation $organisation)
+    {
+        $this->organisation = $organisation;
         return $this;
     }
 }

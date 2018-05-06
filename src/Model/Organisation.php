@@ -1,18 +1,18 @@
 <?php
 
-namespace CapsuleCRM\Entity;
+namespace CapsuleCRM\Model;
 
 class Organisation extends AbstractParty
 {
     /**
      * @var string
      */
-    protected $type = 'organisation';
+    public $type = 'organisation';
 
     /**
      * @var string
      */
-    protected $name;
+    public $name;
 
     /**
      * @return string
@@ -23,22 +23,20 @@ class Organisation extends AbstractParty
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getId()
+    public function getName()
     {
-        return $this->id;
+        return $this->name;
     }
 
     /**
-     * @param int $id
+     * @param string $name
      * @return Organisation
      */
-    public function setId($id)
+    public function setName($name)
     {
-        $this->id = $id;
+        $this->name = $name;
         return $this;
     }
-
-
 }

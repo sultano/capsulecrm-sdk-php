@@ -2,6 +2,8 @@
 
 namespace CapsuleCRM\Resource;
 
+use CapsuleCRM\Model\AbstractParty;
+
 class Party extends AbstractResource implements SearchableInterface
 {
     use SearchableTrait;
@@ -27,5 +29,15 @@ class Party extends AbstractResource implements SearchableInterface
             'page' => $this->getPage(),
             'perPage' => $this->getPerPage(),
         ])['parties'];
+    }
+
+    /**
+     * @param AbstractParty $party
+     * @return array
+     * @throws \CapsuleCRM\Exception\ApiException
+     */
+    public function create(AbstractParty $party)
+    {
+        return $this->client->post($this->uri, $party->toArray());
     }
 }
