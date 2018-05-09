@@ -11,6 +11,8 @@ use CapsuleCRM\Resource\AbstractResource;
  *
  * @package CapsuleCRM
  * @property-read Resource\Party $party party resource
+ * @property-read Resource\Opportunity $opportunity opportunity resource
+ * @property-read Resource\Entry $entry entry resource
  */
 class Client
 {
