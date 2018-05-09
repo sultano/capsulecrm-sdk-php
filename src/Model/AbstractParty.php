@@ -17,7 +17,7 @@ abstract class AbstractParty extends AbstractModel
     /**
      * @var PhoneNumber[]
      */
-    public $phoneNumbers;
+    public $phoneNumbers = [];
 
     /**
      * @var EmailAddress[]
