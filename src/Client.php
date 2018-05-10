@@ -24,6 +24,11 @@ class Client
     protected $accessToken = '';
 
     /**
+     * @var array
+     */
+    protected $lastResponseHeaders = [];
+
+    /**
      * @var string
      */
     protected $lastResponseRaw = '';
@@ -121,6 +126,7 @@ class Client
      */
     private function request($method, $path, array $params = [], $data = null)
     {
+        $this->lastResponseHeaders = [];
         $this->lastResponseRaw = null;
         $this->lastResponse = null;
 
@@ -130,29 +136,35 @@ class Client
             $url .= '?' . http_build_query($params);
         }
 
+        $requestHeaders = [
+            sprintf('Authorization: Bearer %s', $this->accessToken),
+            'Accept: application/json',
+        ];
+
         $ch = curl_init(self::API_ENDPOINT . $url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_HEADERFUNCTION, [$this, 'setLastResponseHeader']);
         curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
         curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $this->curlConnectTimeout);
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->curlTimeout);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            sprintf('Authorization: Bearer %s', $this->accessToken),
-            'Accept: application/json',
-        ]);
 
         if ($data !== null) {
             $jsonData = json_encode($data);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+
+            $requestHeaders = array_merge($requestHeaders, [
                 'Content-Type: application/json',
                 'Content-Length: ' . strlen($jsonData),
             ]);
         }
+
+        // Set request headers
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $requestHeaders);
 
         // Log last raw response
         $this->lastResponseRaw = curl_exec($ch);
@@ -173,10 +185,34 @@ class Client
 
         // Check HTTP status code
         if ($statusCode < 200 || $statusCode >= 300) {
-            throw new Exception\ApiException('Request failure: ' . $response['result'], $statusCode);
+            throw new Exception\ApiException('Request failure: ' . $response['message'], $statusCode);
         }
 
         return $response;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLastResponseHeaders()
+    {
+        return $this->lastResponseHeaders;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLastResponse()
+    {
+        return $this->lastResponse;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRawLastResponse()
+    {
+        return $this->lastResponseRaw;
     }
 
     /**
@@ -192,5 +228,17 @@ class Client
 
         $resource = new $resourceClass($this);
         return $resource;
+    }
+
+    /**
+     * @param $curl
+     * @param string $headerLine
+     * @return int
+     */
+    protected function setLastResponseHeader($curl, $headerLine)
+    {
+        $this->lastResponseHeaders[] = $headerLine;
+
+        return strlen($headerLine);
     }
 }
