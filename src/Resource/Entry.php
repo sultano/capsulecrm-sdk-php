@@ -15,14 +15,15 @@ class Entry extends AbstractResource implements SearchableInterface
 
     /**
      * @param Model\Entry $entry
-     * @return array
+     * @return Model\Entry
      * @throws \CapsuleCRM\Exception\ApiException
      */
     public function create(Model\Entry $entry)
     {
-        return $this->hydrate(
-            $this->client->post($this->uri, $entry->toArray())['entry'],
-            new Model\Entry()
-        );
+        $response = $this->client->post($this->uri, [
+            'entry' => $entry->toArray(),
+        ]);
+
+        return $this->hydrate($response['entry'], new Model\Entry());
     }
 }

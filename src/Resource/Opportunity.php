@@ -40,9 +40,10 @@ class Opportunity extends AbstractResource implements SearchableInterface
      */
     public function create(Model\Opportunity $opportunity)
     {
-        return $this->hydrate(
-            $this->client->post($this->uri, $opportunity->toArray())['opportunity'],
-            new Model\Opportunity()
-        );
+        $response = $this->client->post($this->uri, [
+            'opportunity' => $opportunity->toArray(),
+        ]);
+
+        return $this->hydrate($response['opportunity'], new Model\Opportunity());
     }
 }
