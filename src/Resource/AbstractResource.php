@@ -55,6 +55,11 @@ abstract class AbstractResource
         }
 
         foreach ($data as $property => $value) {
+            // Skip empty values
+            if (empty($value)) {
+                continue;
+            }
+
             $setterName = 'set' . ucfirst($property);
             if (is_callable([$object, $setterName]) && !is_array($value)) {
                 $object->{$setterName}($value);
