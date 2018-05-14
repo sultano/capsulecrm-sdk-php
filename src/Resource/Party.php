@@ -72,7 +72,7 @@ class Party extends AbstractResource implements SearchableInterface
         $response = $this->client->post($this->uri, [
             'party' => $party->toArray(),
         ]);
-        $object = $party['type'] == 'person' ? new Person() : new Organisation();
+        $object = $party->getType() == 'person' ? new Person() : new Organisation();
 
         return $this->hydrate($response['party'], $object);
     }
