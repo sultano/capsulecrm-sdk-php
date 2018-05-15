@@ -20,6 +20,11 @@ class Opportunity extends AbstractModel
     public $name;
 
     /**
+     * @var User
+     */
+    public $owner;
+
+    /**
      * @var Milestone
      */
     public $milestone;
@@ -80,6 +85,24 @@ class Opportunity extends AbstractModel
     public function setName($name)
     {
         $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param User $owner
+     * @return Opportunity
+     */
+    public function setOwner(User $owner)
+    {
+        $this->owner = $owner;
         return $this;
     }
 
