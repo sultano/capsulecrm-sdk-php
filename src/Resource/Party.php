@@ -76,4 +76,20 @@ class Party extends AbstractResource implements SearchableInterface
 
         return $this->hydrate($response['party'], $object);
     }
+
+    /**
+     * @param int $partyId
+     * @param AbstractParty $party
+     * @return AbstractParty
+     * @throws \CapsuleCRM\Exception\ApiException
+     */
+    public function update($partyId, AbstractParty $party)
+    {
+        $response = $this->client->put(sprintf('%s/%d', $this->uri, $partyId), [
+            'party' => $party->toArray(),
+        ]);
+        $object = $party->getType() == 'person' ? new Person() : new Organisation();
+
+        return $this->hydrate($response['party'], $object);
+    }
 }
