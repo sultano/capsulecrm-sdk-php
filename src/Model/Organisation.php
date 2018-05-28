@@ -19,7 +19,7 @@ class Organisation extends AbstractParty
      */
     public function getType()
     {
-        return $this->getType();
+        return $this->type;
     }
 
     /**
